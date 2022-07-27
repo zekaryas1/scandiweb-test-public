@@ -1,5 +1,6 @@
 # About the project
-Junior Developer Test Task from Scandiweb
+- Junior Developer Test Task from Scandiweb
+- [Deployed Website](https://scandiweb-test.onrender.com/)
 
 The project has two parts
 - [Front-end](frontend/README.md) built with `React.js`, running on `port 8080`
