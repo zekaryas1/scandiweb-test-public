@@ -12,8 +12,15 @@ include_once "../../utils/config.php";
 // Instantiate product object can be any product
 $product = new Book();
 
-// Product read query
-$result = $product->read();
+$result = null;
+if (isset($_GET['sku'])) {
+    $given_sku = $_GET['sku'];
+    $product->setSku($given_sku);
+    $result = $product->readSingle();
+} else {
+    // Product read query
+    $result = $product->read();
+}
 
 // Get row count
 $num = $result->rowCount();
@@ -40,6 +47,6 @@ if ($num > 0 and isset($commands)) {
 } else {
     // No Products
     echo json_encode(
-        array('message' => 'No Products Found')
+        array('data' => array())
     );
 }
