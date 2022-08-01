@@ -20,6 +20,7 @@ function ProductAdd() {
 
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formInvalid, setFormInvalid] = useState(false);
+    const [skuError, setSkuError] = useState(false);
     const navigate = useNavigate();
 
     const weightValidation = () => {
@@ -53,11 +54,12 @@ function ProductAdd() {
 
     }
 
-    const addProduct = (event) => {
+    const addProduct = async (event) => {
         event.preventDefault();
         setFormSubmitted(true);
-        const ValidData = validation()
-        if (ValidData) {
+        const ValidData = validation();
+        const isProductUnique = await productIsUnique(product.sku);
+        if (ValidData && isProductUnique) {
             setFormInvalid(false);
             fetch(`${endpoint}/create.php`, {
                 method: 'POST',
@@ -65,6 +67,8 @@ function ProductAdd() {
             }).then(value => {
                 navigate("/");
             })
+        } else if (!isProductUnique) {
+            setSkuError(true);
         } else {
             setFormInvalid(true);
         }
@@ -75,6 +79,13 @@ function ProductAdd() {
             ...product,
             [event.target.name]: event.target.value
         })
+    }
+
+    const productIsUnique = async (sku) => {
+        setSkuError(false);
+        const response = await fetch(`${endpoint}/read.php?sku=${sku}`);
+        const json_response = await response.json();
+        return json_response.data.length === 0;
     }
 
     return (
@@ -99,6 +110,7 @@ function ProductAdd() {
                             onChange={setProductValue}
                             required
                         />
+                        {skuError && <UserError field={"sku"} customError={"This sku is already used"}/>}
                         {(!product.sku && formSubmitted) && <UserError field={"sku"}/>}
                     </div>
 
