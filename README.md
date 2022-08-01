@@ -36,5 +36,6 @@ docker compose up -d --build
 
 ## Backend endpoints
 - POST `http://localhost:8080/api/products/create.php`
-- GET `http://localhost:8080/api/products/read.php`
+- GET `http://localhost:8080/api/products/read.php`  #read all products
+- GET `http://localhost:8080/api/products/read.php?sku=xyz` #read a product with sku xyz
 - DELETE `http://localhost:8080/api/products/delete.php`
